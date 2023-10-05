@@ -1,0 +1,193 @@
+C251 COMPILER V5.60.0,  main                                                               06/10/23  07:46:05  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C251\BIN\C251.EXE ..\USER\src\main.c XSMALL BROWSE INCDIR(..\..\..\Libraries\boards\inc;
+                    -..\..\..\Libraries\startup\inc;..\USER\inc;..\..\..\Libraries\deivers\inc) DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJE
+                    -CT(.\Objects\main.obj) 
+
+stmt  level    source
+
+    1          /********************************************************************************************************
+             -*************
+    2           *     COPYRIGHT NOTICE
+    3           *     Copyright (c) 2023,CNU_W.PIE
+    4           *     All rights reserved.
+    5           *
+    6           *     除注明出处外，以下所有内容版权均属胖胖个人所有，未经允许，不得用于商业用途，
+    7           *     修改内容时必须保留PP的版权声明。
+    8           *     Except where indicated, the copyright of all the contents below is owned by PP
+    9           *     and can not be used for commercial purposes without permission.
+   10           *     The copyright notice of PP must be preserved when modifying the content.
+   11           *
+   12           * @file       main.h
+   13           * @brief      lv3
+   14           * @author     刘臆杨
+   15           * @version    v1.0
+   16           * @note       NULL
+   17           * @date       2023-07-26
+   18           ********************************************************************************************************
+             -************/
+   19          
+   20          #include "main.h" //调用“图书馆”
+   21          
+   22          int i;
+   23          int j;
+   24          int k;
+   25          int auth = 0;
+   26          int touch_count = 0;
+   27          
+   28          int n = 4;
+   29          
+   30          int cha_p[] = {5, 5, 6, 6}; // 控制开启位势
+   31          int cha_pin[] = {8, 1, 2, 8};
+   32          
+   33          uint8_t dis_numbers[4] = {0}; // 选择显示数字
+   34          
+   35          static uint8_t vol[4][4] = {
+   36              {0, 1, 1, 1}, // 打开第一位
+   37              {1, 0, 1, 1}, // 打开第二位
+   38              {1, 1, 0, 1}, // 打开第三位
+   39              {1, 1, 1, 0}, // 打开第四位
+   40          };
+   41          
+   42          uint8_t numbers[10][8] = {
+   43              {1, 1, 1, 1, 1, 1, 0, 0}, // 0
+   44              {0, 1, 1, 0, 0, 0, 0, 0}, // 1
+   45              {1, 1, 0, 1, 1, 0, 1, 0}, // 2
+   46              {1, 1, 1, 1, 0, 0, 1, 0}, // 3
+   47              {0, 1, 1, 0, 0, 1, 1, 0}, // 4
+   48              {1, 0, 1, 1, 0, 1, 1, 0}, // 5
+   49              {1, 0, 1, 1, 1, 1, 1, 0}, // 6
+   50              {1, 1, 1, 0, 0, 0, 0, 0}, // 7
+   51              {1, 1, 1, 1, 1, 1, 1, 0}, // 8
+   52              {1, 1, 1, 1, 0, 1, 1, 0}  // 9
+   53          };
+   54          
+   55          // 初始化
+C251 COMPILER V5.60.0,  main                                                               06/10/23  07:46:05  PAGE 2   
+
+   56          void setup()
+   57          {
+   58   1          Board_Init();
+   59   1          for (k = 0; k < 4; k++)
+   60   1              GPIO_Init(cha_p[k], cha_pin[k], 3);
+   61   1          for (i = 0; i < 8; i++)
+   62   1              GPIO_Init(7, 1 << i, 3);
+   63   1          GPIO_Init(GPIO_P0, GPIO_Pin_7, GPIO_PullUp);
+   64   1      }
+   65          
+   66          // 开启指定位选
+   67          void open_bit(int k)
+   68          {
+   69   1          for (i = 0; i < 4; i++)
+   70   1              GPIO_Write_Bit(cha_p[i], cha_pin[i], vol[k][i]);
+   71   1      }
+   72          
+   73          // 为指定位写入数字
+   74          void write_number(int k)
+   75          {
+   76   1          for (i = 0; i < 8; i++)
+   77   1              GPIO_Write_Bit(7, 1 << i, numbers[dis_numbers[k]][i]);
+   78   1          Ms_Delay(1);
+   79   1      }
+   80          
+   81          // 检查开关状态
+   82          int check_switch()
+   83          {
+   84   1          if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_7) == 0)
+   85   1          {
+   86   2              if (auth == 1) // 防重入
+   87   2              {
+   88   3                  touch_count++;
+   89   3                  if (touch_count == 10)
+   90   3                  {
+   91   4                      touch_count = 0;
+   92   4                      auth = 2;
+   93   4                      goto out;
+   94   4                  }
+   95   3                  touch_count = 0;
+   96   3                  return 0;
+   97   3              }
+   98   2          out:
+   99   2              if (auth == 0)
+  100   2                  auth = 1;
+  101   2              if (dis_numbers[3] == 9)
+  102   2              {
+  103   3                  dis_numbers[3] = 0;
+  104   3                  if (dis_numbers[2] == 9)
+  105   3                  {
+  106   4                      dis_numbers[2] = 0;
+  107   4                      if (dis_numbers[1] == 9)
+  108   4                      {
+  109   5                          dis_numbers[1] = 0;
+  110   5                          if (dis_numbers[0] == 9)
+  111   5                          {
+  112   6                              dis_numbers[0] = 0;
+  113   6                              return 0;
+  114   6                          }
+  115   5                          dis_numbers[0] += 1;
+  116   5                          return 0;
+  117   5                      }
+  118   4                      dis_numbers[1] += 1;
+  119   4                      return 0;
+  120   4                  }
+  121   3                  dis_numbers[2] += 1;
+C251 COMPILER V5.60.0,  main                                                               06/10/23  07:46:05  PAGE 3   
+
+  122   3                  return 0;
+  123   3              }
+  124   2              dis_numbers[3] += 1;
+  125   2              return 0;
+  126   2          }
+  127   1      }
+  128          
+  129          // 重置重入状态
+  130          void reauth()
+  131          {
+  132   1          if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_7) == 1)
+  133   1              auth = 0;
+  134   1      }
+  135          
+  136          void main()  // 必要的主函数
+  137          {            // 主函数大括号
+  138   1          setup(); // 培训底板初始化
+  139   1          while (1)
+  140   1          {
+  141   2              check_switch();
+  142   2              for (k = 0; k < 4; k++)
+  143   2              {
+  144   3                  open_bit(k);
+  145   3                  write_number(k);
+  146   3                  Ms_Delay(1);
+  147   3                  reauth();
+  148   3              }
+  149   2          }
+  150   1      } // 主函数大括号
+*** WARNING C180 IN LINE 126 OF ..\USER\src\main.c: 'check_switch': not every path returns a value
+*** WARNING C180 IN LINE 126 OF ..\USER\src\main.c: 'check_switch': not every path returns a value
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       485     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =       128     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =       154     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

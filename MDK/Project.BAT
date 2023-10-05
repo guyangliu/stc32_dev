@@ -1,0 +1,29 @@
+SET C251INC=C:\Keil_v5\C251\Inc;C:\Keil_v5\C251\Inc\STC
+SET C251LIB=C:\Keil_v5\C251\Lib
+SET CPU_TYPE=STC32G12K128 Series
+SET CPU_VENDOR=STC
+SET UV2_TARGET=Project
+SET CPU_XTAL=0x02160EC0
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\common.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\isr.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\main.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\BMI088~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\BMI088~2.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\Encoder.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\OLED.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\LCD.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\Font.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\REMOTE~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\nrf24l01.__i"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNU_PI~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNU_PI~2.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNU_PI~3.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNU_PI~4.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNA846~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNA51D~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNEA9D~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CN1C44~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNEB2C~1.__I"
+"C:\Keil_v5\C251\BIN\C251.EXE" @".\Objects\CNA1B5~1.__I"
+"C:\Keil_v5\C251\BIN\L251.EXE" @".\Objects\NIXIE_~1.LNP"
+"C:\Keil_v5\C251\BIN\OH251.EXE" ".\Objects\nixie_tube" H386 RANGE (0 - 0xFFFFFF)

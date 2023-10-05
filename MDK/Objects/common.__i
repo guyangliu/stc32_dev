@@ -1,0 +1,1 @@
+"..\..\..\Libraries\startup\src\common.c" XSMALL BROWSE INCDIR(..\..\..\Libraries\boards\inc;..\..\..\Libraries\startup\inc;..\USER\inc;..\..\..\Libraries\deivers\inc) DEBUG PRINT(.\Listings\common.lst) TABS (2) OBJECT(.\Objects\common.obj)
