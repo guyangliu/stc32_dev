@@ -86,16 +86,17 @@ int check_switch()
         if (auth == 1) // ∑¿÷ÿ»Î
         {
             touch_count++;
-            if (touch_count == 10)
+            if (touch_count == 100)
             {
                 touch_count = 0;
                 auth = 2;
                 goto out;
             }
-            touch_count = 0;
+
             return 0;
         }
     out:
+        touch_count = 0;
         if (auth == 0)
             auth = 1;
         if (dis_numbers[3] == 9)

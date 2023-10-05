@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               06/10/23  07:46:05  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               06/10/23  07:58:29  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -66,7 +66,7 @@ stmt  level    source
    53          };
    54          
    55          // 初始化
-C251 COMPILER V5.60.0,  main                                                               06/10/23  07:46:05  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               06/10/23  07:58:29  PAGE 2   
 
    56          void setup()
    57          {
@@ -101,77 +101,78 @@ stmt  level    source
    86   2              if (auth == 1) // 防重入
    87   2              {
    88   3                  touch_count++;
-   89   3                  if (touch_count == 10)
+   89   3                  if (touch_count == 100)
    90   3                  {
    91   4                      touch_count = 0;
    92   4                      auth = 2;
    93   4                      goto out;
    94   4                  }
-   95   3                  touch_count = 0;
+   95   3      
    96   3                  return 0;
    97   3              }
    98   2          out:
-   99   2              if (auth == 0)
-  100   2                  auth = 1;
-  101   2              if (dis_numbers[3] == 9)
-  102   2              {
-  103   3                  dis_numbers[3] = 0;
-  104   3                  if (dis_numbers[2] == 9)
-  105   3                  {
-  106   4                      dis_numbers[2] = 0;
-  107   4                      if (dis_numbers[1] == 9)
-  108   4                      {
-  109   5                          dis_numbers[1] = 0;
-  110   5                          if (dis_numbers[0] == 9)
-  111   5                          {
-  112   6                              dis_numbers[0] = 0;
-  113   6                              return 0;
-  114   6                          }
-  115   5                          dis_numbers[0] += 1;
-  116   5                          return 0;
-  117   5                      }
-  118   4                      dis_numbers[1] += 1;
-  119   4                      return 0;
-  120   4                  }
-  121   3                  dis_numbers[2] += 1;
-C251 COMPILER V5.60.0,  main                                                               06/10/23  07:46:05  PAGE 3   
+   99   2              touch_count = 0;
+  100   2              if (auth == 0)
+  101   2                  auth = 1;
+  102   2              if (dis_numbers[3] == 9)
+  103   2              {
+  104   3                  dis_numbers[3] = 0;
+  105   3                  if (dis_numbers[2] == 9)
+  106   3                  {
+  107   4                      dis_numbers[2] = 0;
+  108   4                      if (dis_numbers[1] == 9)
+  109   4                      {
+  110   5                          dis_numbers[1] = 0;
+  111   5                          if (dis_numbers[0] == 9)
+  112   5                          {
+  113   6                              dis_numbers[0] = 0;
+  114   6                              return 0;
+  115   6                          }
+  116   5                          dis_numbers[0] += 1;
+  117   5                          return 0;
+  118   5                      }
+  119   4                      dis_numbers[1] += 1;
+  120   4                      return 0;
+  121   4                  }
+C251 COMPILER V5.60.0,  main                                                               06/10/23  07:58:29  PAGE 3   
 
-  122   3                  return 0;
-  123   3              }
-  124   2              dis_numbers[3] += 1;
-  125   2              return 0;
-  126   2          }
-  127   1      }
-  128          
-  129          // 重置重入状态
-  130          void reauth()
-  131          {
-  132   1          if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_7) == 1)
-  133   1              auth = 0;
-  134   1      }
-  135          
-  136          void main()  // 必要的主函数
-  137          {            // 主函数大括号
-  138   1          setup(); // 培训底板初始化
-  139   1          while (1)
-  140   1          {
-  141   2              check_switch();
-  142   2              for (k = 0; k < 4; k++)
-  143   2              {
-  144   3                  open_bit(k);
-  145   3                  write_number(k);
-  146   3                  Ms_Delay(1);
-  147   3                  reauth();
-  148   3              }
-  149   2          }
-  150   1      } // 主函数大括号
-*** WARNING C180 IN LINE 126 OF ..\USER\src\main.c: 'check_switch': not every path returns a value
-*** WARNING C180 IN LINE 126 OF ..\USER\src\main.c: 'check_switch': not every path returns a value
+  122   3                  dis_numbers[2] += 1;
+  123   3                  return 0;
+  124   3              }
+  125   2              dis_numbers[3] += 1;
+  126   2              return 0;
+  127   2          }
+  128   1      }
+  129          
+  130          // 重置重入状态
+  131          void reauth()
+  132          {
+  133   1          if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_7) == 1)
+  134   1              auth = 0;
+  135   1      }
+  136          
+  137          void main()  // 必要的主函数
+  138          {            // 主函数大括号
+  139   1          setup(); // 培训底板初始化
+  140   1          while (1)
+  141   1          {
+  142   2              check_switch();
+  143   2              for (k = 0; k < 4; k++)
+  144   2              {
+  145   3                  open_bit(k);
+  146   3                  write_number(k);
+  147   3                  Ms_Delay(1);
+  148   3                  reauth();
+  149   3              }
+  150   2          }
+  151   1      } // 主函数大括号
+*** WARNING C180 IN LINE 127 OF ..\USER\src\main.c: 'check_switch': not every path returns a value
+*** WARNING C180 IN LINE 127 OF ..\USER\src\main.c: 'check_switch': not every path returns a value
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       485     ------
+  code size            =       479     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
