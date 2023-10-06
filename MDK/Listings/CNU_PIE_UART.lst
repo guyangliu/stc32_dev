@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  CNU_PIE_UART                                                       06/10/23  08:20:08  PAGE 1   
+C251 COMPILER V5.60.0,  CNU_PIE_UART                                                       06/10/23  11:25:02  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE CNU_PIE_UART
@@ -66,7 +66,7 @@ stmt  level    source
    47   3            if     ((UART1_RX_P30 == UART_Rx_Pin) && (UART1_TX_P31 == UART_Tx_Pin)) P_SW1 |= 0x00;
    48   3            else if((UART1_RX_P36 == UART_Rx_Pin) && (UART1_TX_P37 == UART_Tx_Pin)) P_SW1 |= 0x40;
    49   3            else if((UART1_RX_P16 == UART_Rx_Pin) && (UART1_TX_P17 == UART_Tx_Pin)) P_SW1 |= 0x80;
-C251 COMPILER V5.60.0,  CNU_PIE_UART                                                       06/10/23  08:20:08  PAGE 2   
+C251 COMPILER V5.60.0,  CNU_PIE_UART                                                       06/10/23  11:25:02  PAGE 2   
 
    50   3            else if((UART1_RX_P43 == UART_Rx_Pin) && (UART1_TX_P44 == UART_Tx_Pin)) P_SW1 |= 0xc0;
    51   3            UART_BUSY[1] = 0; ES = 1; break;
@@ -134,7 +134,7 @@ stmt  level    source
   107           /*******************************************************************************************************
              -*******************
   108           * @brief  UART发送数组
-C251 COMPILER V5.60.0,  CNU_PIE_UART                                                       06/10/23  08:20:08  PAGE 3   
+C251 COMPILER V5.60.0,  CNU_PIE_UART                                                       06/10/23  11:25:02  PAGE 3   
 
   109           * @exampleCode
   110           *       UART_PutBuff(UART_1, &data[0] ,5);        //串口1发送data数组 发送五个字节
