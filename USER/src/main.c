@@ -22,7 +22,8 @@
 int i;
 int j;
 int k;
-int auth = 0;
+int auth1 = 0;
+int auth2 = 0;
 int touch_count = 0;
 
 int n = 4;
@@ -60,6 +61,7 @@ void setup()
         GPIO_Init(cha_p[k], cha_pin[k], 3);
     for (i = 0; i < 8; i++)
         GPIO_Init(7, 1 << i, 3);
+    GPIO_Init(GPIO_P0, GPIO_Pin_6, GPIO_PullUp);
     GPIO_Init(GPIO_P0, GPIO_Pin_7, GPIO_PullUp);
 }
 
@@ -79,26 +81,25 @@ void write_number(int k)
 }
 
 // 检查开关状态
-int check_switch()
+int check_switch_p()
 {
     if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_7) == 0)
     {
-        if (auth == 1) // 防重入
+        if (auth1 == 1) // 防重入
         {
             touch_count++;
             if (touch_count == 100)
             {
                 touch_count = 0;
-                auth = 2;
+                auth1 = 2;
                 goto out;
             }
-
             return 0;
         }
     out:
         touch_count = 0;
-        if (auth == 0)
-            auth = 1;
+        if (auth1 == 0)
+            auth1 = 1;
         if (dis_numbers[3] == 9)
         {
             dis_numbers[3] = 0;
@@ -127,11 +128,61 @@ int check_switch()
     }
 }
 
+int check_switch_m()
+{
+    if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_6) == 0)
+    {
+        if (auth2 == 1) // 防重入
+        {
+            touch_count++;
+            if (touch_count == 100)
+            {
+                touch_count = 0;
+                auth2 = 2;
+                goto out;
+            }
+
+            return 0;
+        }
+    out:
+        touch_count = 0;
+        if (auth2 == 0)
+            auth2 = 1;
+        if (dis_numbers[3] == 0)
+        {
+            dis_numbers[3] = 9;
+            if (dis_numbers[2] == 0)
+            {
+                dis_numbers[2] = 9;
+                if (dis_numbers[1] == 0)
+                {
+                    dis_numbers[1] = 9;
+                    if (dis_numbers[0] == 0)
+                    {
+                        dis_numbers[0] = 9;
+                        return 0;
+                    }
+                    dis_numbers[0] -= 1;
+                    return 0;
+                }
+                dis_numbers[1] -= 1;
+                return 0;
+            }
+            dis_numbers[2] -= 1;
+            return 0;
+        }
+        dis_numbers[3] -= 1;
+        return 0;
+    }
+}
+
 // 重置重入状态
 void reauth()
 {
     if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_7) == 1)
-        auth = 0;
+        auth1 = 0;
+    if (GPIO_Read_Bit(GPIO_P0, GPIO_Pin_6) == 1)
+        auth2 = 0;
 }
 
 void main()  // 必要的主函数
@@ -139,7 +190,8 @@ void main()  // 必要的主函数
     setup(); // 培训底板初始化
     while (1)
     {
-        check_switch();
+        check_switch_m();
+        check_switch_p();
         for (k = 0; k < 4; k++)
         {
             open_bit(k);
