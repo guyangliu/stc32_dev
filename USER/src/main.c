@@ -18,6 +18,9 @@
  ********************************************************************************************************************/
 
 #include "main.h" //调用“图书馆”
+#if !defined(__C251__) && !defined(__C51__) && defined(__VSCODE)
+#include "../debug/debug.h"
+#endif
 
 int i;
 int j;
@@ -25,6 +28,7 @@ int k;
 int auth1 = 0;
 int auth2 = 0;
 int touch_count = 0;
+int time_count = 0;
 
 int n = 4;
 
@@ -151,9 +155,46 @@ void P0_INT_7(void) interrupt P0INT_VECTOR
 end1:;
 }
 
+void P0_Timer(void) interrupt TMR0_VECTOR
+{
+    PIT_Timer_Clear(TIM0);
+    time_count++;
+    if (time_count % 100 == 0)
+    {
+        if (dis_numbers[3] == 9)
+        {
+            dis_numbers[3] = 0;
+            if (dis_numbers[2] == 9)
+            {
+                dis_numbers[2] = 0;
+                if (dis_numbers[1] == 9)
+                {
+                    dis_numbers[1] = 0;
+                    if (dis_numbers[0] == 9)
+                    {
+                        dis_numbers[0] = 0;
+                        goto end2;
+                    }
+                    dis_numbers[0] += 1;
+                    goto end2;
+                }
+                dis_numbers[1] += 1;
+                goto end2;
+            }
+            dis_numbers[2] += 1;
+            goto end2;
+        }
+        dis_numbers[3] += 1;
+        goto end2;
+    }
+
+end2:;
+}
+
 void main()  // 必要的主函数
 {            // 主函数大括号
     setup(); // 培训底板初始化
+    PIT_Timer_Ms(TIM0, 10);
     while (1)
     {
         for (k = 0; k < 4; k++)
@@ -164,5 +205,4 @@ void main()  // 必要的主函数
         }
     }
 } // 主函数大括号
-
-// interrupt 37
+  // _REENTRANT
