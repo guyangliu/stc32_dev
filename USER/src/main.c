@@ -10,15 +10,15 @@
  *     The copyright notice of PP must be preserved when modifying the content.
  *
  * @file       main.h
- * @brief      lv3
+ * @brief      lv0
  * @author     刘臆杨
  * @version    v1.0
  * @note       NULL
  * @date       2023-07-26
  ********************************************************************************************************************/
 
-#include "main.h" //调用“图书馆”
-#if !defined(__C251__) && !defined(__C51__) && defined(__VSCODE)
+#include "main.h"                                                // 调用“图书馆”
+#if !defined(__C251__) && !defined(__C51__) && defined(__VSCODE) // 只用于消除vscode报错，对程序执行无影响
 #include "../debug/debug.h"
 #endif
 
@@ -26,8 +26,9 @@ int i;
 int j;
 int k;
 int auth1 = 0;
-int auth2 = 0;
-int touch_count = 0;
+
+int touch_count1 = 0;
+int touch_count2 = 0;
 int time_count = 0;
 
 int n = 4;
@@ -88,14 +89,20 @@ void write_number(int k)
     Ms_Delay(1);
 }
 
+// 普通中断，检查按钮是否被按下，被按下时显示数组++--
+// 长按连加功能待实现
 void P0_INT_7(void) interrupt P0INT_VECTOR
 {
     GPIO_EXTI_Flag_Read(GPIO_P0);
     if (Port_Exti_Flag[0])
     {
         GPIO_EXTI_Flag_Clear(GPIO_P0);
+        // p07实现加
         if (Port_Exti_Flag[0] & Port_Pin_7)
         {
+            // 检查是否为长按
+
+            // 进位器
             if (dis_numbers[3] == 9)
             {
                 dis_numbers[3] = 0;
@@ -123,6 +130,7 @@ void P0_INT_7(void) interrupt P0INT_VECTOR
             goto end1;
         }
 
+        // p06实现减
         if (Port_Exti_Flag[0] & Port_Pin_6)
         {
             if (dis_numbers[3] == 0)
@@ -155,12 +163,15 @@ void P0_INT_7(void) interrupt P0INT_VECTOR
 end1:;
 }
 
+// 定时中断，定时使显示数组++
 void P0_Timer(void) interrupt TMR0_VECTOR
 {
     PIT_Timer_Clear(TIM0);
     time_count++;
+    // 将间隔时间延长至1s
     if (time_count % 100 == 0)
     {
+        // 进位器
         if (dis_numbers[3] == 9)
         {
             dis_numbers[3] = 0;
@@ -189,6 +200,27 @@ void P0_Timer(void) interrupt TMR0_VECTOR
     }
 
 end2:;
+}
+
+// 定时中断开关
+void P0_INT_4(void) interrupt P4INT_VECTOR
+{
+    GPIO_EXTI_Flag_Read(GPIO_P4);
+    if (Port_Exti_Flag[0])
+    {
+        GPIO_EXTI_Flag_Clear(GPIO_P4);
+        if (auth1 == 1)
+        {
+            ET0 = 0;
+            auth1 = 0;
+        }
+
+        else if (auth1 == 0)
+        {
+            ET0 = 1;
+            auth1 = 1;
+        }
+    }
 }
 
 void main()  // 必要的主函数
